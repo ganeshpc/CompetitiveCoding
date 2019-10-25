@@ -1,102 +1,85 @@
-#include<iostream>
 #include<stdio.h>
-#include<utility>
-#include<algorithm>
-#include<vector>
-#include<array>
-#include<cstring>
 #include<math.h>
-
+#include<cstdlib>
+#include<string>
 
 using namespace std;
 
-void printArray(int*, int);
-void printVector(vector<int> vec);
-void simpleSieve(int num);
-void segmentedSieve(int num);
-void modifyVector(vector<int>&);
 int noOfDigits(int num);
 
 int main() {
-    vector<int> a;
-    a.push_back(12);
-    a.push_back(45);
-    a.push_back(55);
+    int T;
+    scanf("%i", &T);
+    for (int t = 0; t<T; t++) {
+        int avg;
+        int digits = 0;
+        // scanf("%*[^.] %*c %d", &avg);   
 
-    modifyVector(a);
+        float r = static_cast <float> (rand()) / static_cast <float> (RAND_MAX);  
+        
 
-    printVector(a);
-}
+        char* average;
+        // scanf("%s", average);
+        average = to_string(r);
+        printf("float: %f    sting: %s", r, average);
+        return 0;
 
-void modifyVector(vector<int>& a) {
-    a.push_back(77);
-}
+        int ignores = 0;
 
-void printArray(int* arr, int size) {
-    for (int i = 0; i<size; i++) {
-        printf("%i  ",arr[i]);
-    }
+        for (int i = 0; average[i] != '\0'; i++) {
+            if (average[i] == '.') {
+                ignores = i+1;
+                i++;
+                while(average[i] != '\0') {
+                    digits++;
+                    i++;
+                }
+                break;
+            }
+        }   
 
-    printf("\n");
-}
+        if (ignores == 0) {
+            // printf("%d\n", 1);
+            continue;
+        }
 
-void printVector(vector<int> vec) {
-    for (vector<int>::iterator it = vec.begin(); it != vec.end(); it++) {
-        printf("%i  ", *it);
-    }
-    printf("\n");
-}
+        avg = atoi(average);  
 
-void simpleSieve(int num) {
-    bool arr[num];
+        int mataches = 1;
 
-    memset(arr, true, sizeof(arr));
+        while(avg % 10 == 0) {
+            // printf("in while avg: %d\n", avg);
+            avg /= 10;
+            digits--;
+        }
 
-    for (int p = 2; p*p < num; p++) {
+        for (int i = 0; i<digits; i++) {
+            int exp = pow(10, i+1);
+            int endDigit = (avg % exp) / (exp/10);
 
-        if (arr[p] == true) {
-            for (int i = p*2; i < num; i+=p) {
-                arr[i] = false;
+            // printf("End digit: %d\n", endDigit);
+            
+            if (endDigit == 1 || endDigit == 3 || endDigit == 7 || endDigit == 9) {
+                // printf("digits: %d  i: %d\n", digits, i);
+                mataches *= pow(10, digits-i);
+                break;
+            }
+
+            if (endDigit == 2 || endDigit == 4 || endDigit == 8 || endDigit == 6) {
+                avg *= 5;
+                mataches *= 5;
+            }
+
+            if (endDigit == 5) {
+                avg *= 2;
+                mataches *= 2;
             }
         }
+
+        printf("%d\n", mataches);
+        
     }
 
-    for (int i = 0; i<num; i++) {
-        if (arr[i]) printf("%i ", i);
-    }
-    printf("\n");    
-}
-
-void segmentedSieve(int num) {
-    vector<int> primes;
-
-    int segment = floor(sqrt(num))+1;
-
-    printf("Segment: %i", segment);
-
-    bool arr[segment];
-
-    memset(arr, true, sizeof(arr));
-
-    for (int p = 2; p*p < segment; p++) {
-        if (arr[p] == true) {
-            for (int i = p*2; i<segment; i+=p) {
-                arr[i] = false;
-            }
-        }
-    }
-
-    for (int i = 2; i < segment; i++) {
-        if (arr[i]) {
-            primes.push_back(i);
-        }
-    }
-
-    for (auto it = primes.begin(); it != primes.end(); it++) {
-        printf("%i ", *it);
-    }
-
-    printf("\n");
 }
 
 int noOfDigits(int num) {
@@ -107,3 +90,4 @@ int noOfDigits(int num) {
     }
     return digits; 
 }
+
