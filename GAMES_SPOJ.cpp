@@ -32,7 +32,7 @@ int main() {
         }   
 
         if (ignores == 0) {
-            // printf("%d\n", 1);
+            printf("%d\n", 1);
             continue;
         }
 
